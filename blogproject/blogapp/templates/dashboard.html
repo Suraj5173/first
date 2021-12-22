@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if messages %}
+{% for message in messages %}
+<p {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %} >{{message}}</p>
+{% endfor %}
+{% endif %}
+<div class="card bg-info mb-3" style="max-width: 18rem;">
+  {% for group in groups %}
+  <div class="card-header">{{group.name}}</div>
+  {% endfor %}
+  <div class="card-body">
+    <h5 class="card-title">{{full_name}}</h5>
+  </div>
+</div>
+
+<a href="{% url 'add' %}" class="btn btn-success">Add Post</a>
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">id</th>
+        <th scope="col">title</th>
+        <th scope="col">desc</th>
+        <th scope="col">action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for post in posts %}  
+      <tr>
+        <th scope="row">{{post.id}}</th>
+        <td>{{post.title}}</td>
+        <td>{{post.desc}}</td>
+        <td class="text-center" ><a href="{% url 'update' post.id %}" class="btn btn-warning btn-sm " >Edit</a>
+          {% if perms.blogapp.delete_post %}  
+          <form action="{% url 'delete' post.id %}" method="post" class="d-inline" >
+                {% csrf_token %}
+                <input type="submit" class="btn btn-danger btn-sm" value="Delete">
+            </form>
+          {% endif %}  
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

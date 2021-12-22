@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if messages %}
+{% for message in messages %}
+<p {% if message.tags %} class="alert alert-{{ message.tags }}" {% endif %} >{{message}}</p>
+{% endfor %}
+{% endif %}
+<form action="" method="post" novalidate >
+    {% csrf_token %}
+    {% for fm in form %}
+     <div class="form-group">
+        {{fm.label_tag}} {{fm}} {{fm.errors|striptags}}
+        <br>
+     </div>
+     {% endfor %}
+    <input type="submit" class="btn btn-outline-primary" value="Submit">
+    {% if form.non_field_errors %}
+    {% for error in form.non_field_errors %}
+    <p class="alert alert-danger" >{{error}}</p>
+    {% endfor %}
+    {% endif %}
+</form>
+{% endblock %}
